@@ -1,0 +1,162 @@
+<br>
+
+<div style="margin-left: 2%;">
+    <table >
+        <tr>
+            <td>
+                <label>Sin Codigo de Barras<br><input type="checkbox" name="sinCodBarcheckbox" id="sinCodBarcheckbox" (click)="verifSinCodigo($event)" ></label>
+            </td>
+            <td>
+                <label [hidden]="checkCod">Código de Barras<br><input type="text" [(ngModel)]="codigo_barra" name="codigo_barra" id="codigo_barra" [hidden]="checkCod" (keyup)="onChangeEvent($event)"></label>
+            </td>
+
+        </tr>
+        <tr>
+            <td>
+                <label>Precio de Venta<br><input type="number" name="precio_venta" id="precio_venta" [(ngModel)]="precio_venta"  min="0.00" max="10000.00" step="0.5"></label>
+            </td>
+            <td>
+                <label>Nombre<br><input type="text" name="nombre" id="nombre"  [(ngModel)]="nombre" (keyup)="onChangeEventNombre($event)"></label>
+            </td>
+
+            <td>
+                <label>Descripción<br><input type="text" name="descripcion" id="descripcion" [(ngModel)]="descripcion"></label>
+            </td>
+            <td>
+                <label>Peso<br><input type="number" name="peso" id="peso" [(ngModel)]="peso"></label>
+            </td>
+            <td>
+                <label>Medida 
+                    <select name="smr" class="form-select" ngModel  (ngModelChange)="setMedidaModelo($event)">
+                        <option value="{{item.id}}" *ngFor="let item of medidas">{{item.nombre}}</option>
+                    </select>
+                </label>
+            </td>
+            <td>
+                <label>Envase
+                    <select name="env" class="form-select" ngModel  (ngModelChange)="setEnvaseModelo($event)">                        
+                        <option value="{{item.id}}" *ngFor="let item of envases">{{item.nombre}}</option>
+                    </select>
+                </label>
+            </td>
+
+            <td [hidden]="true">
+                <label>Empresa
+                    <select name="env" class="form-select" ngModel  (ngModelChange)="setEmpresasModelo($event)">
+                        <option value="{{item.id}}" *ngFor="let item of empresas">{{item.nombre}}</option>
+                    </select>
+                </label>
+            </td>
+            <!--td>
+                <label>Cantidad<br><input type="number" name="" id="" value="1"></label>
+            </td>
+            <td>
+                <label>Venta Por
+                    <select name="smr" class="form-select" >
+                        <option value="{{item.id}}" *ngFor="let item of unidades">{{item.nombre}}</option>
+                    </select>
+                </label>
+            </td-->
+        </tr>
+        <tr>
+            <!--td>
+                <label>Precio de Compra<br><input type="number" name="" id=""></label>
+            </td-->
+        </tr>
+    </table>
+    <hr>
+    <button mat-raised-button (click)="guardarPrecio()">Guardar</button>
+    <button mat-raised-button color="primary" (click)="limpiar()">Limpiar</button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button mat-raised-button  (click)="csvGenerar()">Generar</button>
+    <a href="http://10.1.10.111/Productos.csv" mat-button color="warn">Descargar</a>
+</div>
+<hr>
+
+<div style="margin-left: 5%;margin-right: 5%;">
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Código</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Nombre</th>
+            <!--th scope="col">Descripción</th-->
+            <th scope="col">Peso</th>
+            <th scope="col">Medida</th>
+            <th scope="col">Envase</th>
+            
+            <!--th scope="col">Empresa</th-->
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of preciosBusqueda">
+                <td><input type="radio" name="radio_precio" id="{{item.id}}" value="{{item.id}}" ngModel  (ngModelChange)="setPrecioModelo($event)"></td>
+                <td>{{item.producto.cod}}</td>
+                <td>{{item.precio_venta}}</td>
+                <td>{{item.producto.nombre}} | {{item.producto.descripcion}}</td>
+                <!--td>{{item.producto.descripcion}}</td-->
+                <td>{{item.producto.peso}}</td>
+                <td>{{item.producto.medida.nombre}}</td>
+                <td>{{item.producto.envase.nombre}}</td>
+                
+                <!--td >{{item.producto.empresa.nombre}}</td-->
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<div class="content_popup_g" align="center" [hidden]="alert">
+    <div class="popup_g" style="position:relative;">
+        <div style="position:absolute; top:-35px; right:-35px;">
+            <span (click)="closeAlert()">
+                <mat-icon aria-hidden="false" aria-label="Example home icon" fontIcon="close-bold" style="color: white;"></mat-icon>
+                <!--i style="font-size:2em; color:white; cursor:pointer;" class="icofont icofont-ui-close"></i-->
+            </span>
+        </div>
+        <h1>Editar Producto</h1>
+        <!--p class="popup-msg">Revise su bandeja de entrada</p-->
+        <table>
+            <tr>
+                <td>
+                    <label >Código de Barras<br><input type="text" [(ngModel)]="codigo_barraE" name="codigo_barraE" id="codigo_barraE" [hidden]="checkCod"></label>
+                </td>
+                <!--td>
+                    <label>Sin Codigo de Barras<br><input type="checkbox" name="sinCodBarcheckbox" id="sinCodBarcheckbox" (click)="verifSinCodigo($event)" ></label>
+                </td-->
+            </tr>
+            <tr>
+                <td>
+                    <label>Nombre<br><input type="text" name="nombreE" id="nombreE"  [(ngModel)]="nombreE"></label>
+                    
+                    <label>Descripción<br><input type="text" name="descripcionE" id="descripcionE" [(ngModel)]="descripcionE"></label>
+                    <br>
+                    <label>Peso<br><input type="number" name="pesoE" id="pesoE" [(ngModel)]="pesoE" min="0.00" max="10000.00" step="1"></label>
+                    <label>Medida 
+                        <select name="smr" class="form-select" ngModel  (ngModelChange)="setMedidaModelo($event)">
+                            <option value="{{item.id}}" *ngFor="let item of medidas" [selected]="item.id === medidaE" >{{item.nombre}}</option>
+                        </select>
+                    </label>
+                    <br>
+                    <label>Precio de Venta<br><input type="number" name="precio_ventaE" id="precio_ventaE" [(ngModel)]="precio_ventaE"  min="0.00" max="10000.00" step="0.5"></label>
+                    <label>Envase
+                        <select name="env" class="form-select" ngModel  (ngModelChange)="setEnvaseModelo($event)">                        
+                            <option value="{{item.id}}" *ngFor="let item of envases" [selected]="item.id === envaseE">{{item.nombre}}</option>
+                        </select>
+                    </label>
+                    
+                   
+                    <label [hidden]="true">Empresa
+                        <select name="env" class="form-select" ngModel  (ngModelChange)="setEmpresasModelo($event)">
+                            <option value="{{item.id}}" *ngFor="let item of empresas" [selected]="item.id === empresaE">{{item.nombre}}</option>
+                        </select>
+                    </label>
+                </td>
+            </tr>
+            <button mat-raised-button (click)="guardarEditarPrecio()">Guardar</button>
+            <button mat-raised-button color="primary" (click)="closeAlert()">Cancelar</button>
+        </table>
+
+    </div>
+</div>

@@ -1,0 +1,23 @@
+.numbertext{
+    text-align: right;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.example-container .mat-form-field + .mat-form-field {
+  margin-left: 8px;
+}
